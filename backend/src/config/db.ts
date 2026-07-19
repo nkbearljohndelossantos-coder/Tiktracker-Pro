@@ -1,10 +1,16 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 let isDatabaseOnline = false;
 let pool: mysql.Pool | null = null;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Sandbox In-Memory Data Store (Fallback if MySQL is offline)
 const memoryStore = {
@@ -34,6 +40,51 @@ const memoryStore = {
   audit_logs: [] as any[]
 };
 
+export const initializeDatabaseSchema = async () => {
+  if (!pool) return;
+  try {
+    const [tables] = await pool.query(`
+      SELECT COUNT(*) AS count 
+      FROM information_schema.tables 
+      WHERE table_schema = DATABASE() AND table_name = 'users'
+    `) as any[];
+
+    if (tables && tables[0] && tables[0].count === 0) {
+      console.log('Database empty. Automatically initializing schema...');
+      
+      let schemaPath = path.join(__dirname, '../database/schema.sql');
+      let seedsPath = path.join(__dirname, '../database/seeds.sql');
+
+      if (!fs.existsSync(schemaPath)) {
+        schemaPath = path.join(__dirname, '../../../database/schema.sql');
+      }
+      if (!fs.existsSync(seedsPath)) {
+        seedsPath = path.join(__dirname, '../../../database/seeds.sql');
+      }
+
+      if (fs.existsSync(schemaPath)) {
+        const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+        await pool.query(schemaSql);
+        console.log('✔ Database schema initialized successfully.');
+      } else {
+        console.warn('❌ Database schema file not found at:', schemaPath);
+      }
+
+      if (fs.existsSync(seedsPath)) {
+        const seedsSql = fs.readFileSync(seedsPath, 'utf8');
+        await pool.query(seedsSql);
+        console.log('✔ Database seeds loaded successfully.');
+      } else {
+        console.warn('❌ Database seeds file not found at:', seedsPath);
+      }
+    } else {
+      console.log('Database already initialized. Skipping auto-migration.');
+    }
+  } catch (err: any) {
+    console.error('Failed to initialize database schema:', err.message);
+  }
+};
+
 // Initialize Pool
 try {
   pool = mysql.createPool({
@@ -46,14 +97,18 @@ try {
     connectionLimit: 10,
     queueLimit: 0,
     enableKeepAlive: true,
-    keepAliveInitialDelay: 0
+    keepAliveInitialDelay: 0,
+    multipleStatements: true
   });
 
   pool.getConnection()
-    .then((conn) => {
+    .then(async (conn) => {
       console.log('Database connected successfully. Running in MySQL mode.');
       isDatabaseOnline = true;
       conn.release();
+      
+      // Auto-run schema migrations
+      await initializeDatabaseSchema();
     })
     .catch((err) => {
       console.warn('MySQL Offline. Starting in Sandboxed In-Memory Fallback mode.');
