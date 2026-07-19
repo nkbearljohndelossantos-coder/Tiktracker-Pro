@@ -7,11 +7,35 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Look for .env in current folder, backend folder, and project root folder
-dotenv.config();
-dotenv.config({ path: path.join(__dirname, '../.env') });
-dotenv.config({ path: path.join(__dirname, '../../.env') });
-dotenv.config({ path: path.join(__dirname, '../../../.env') });
+// Diagnostic Dotenv Loader for Production
+const envPaths = [
+  path.join(process.cwd(), '.env'),
+  path.join(__dirname, '../.env'),
+  path.join(__dirname, '../../.env'),
+  path.join(__dirname, '../../../.env')
+];
+
+let loadedEnvPath = '';
+for (const p of envPaths) {
+  if (fs.existsSync(p)) {
+    dotenv.config({ path: p });
+    loadedEnvPath = p;
+    break;
+  }
+}
+
+if (loadedEnvPath) {
+  console.log(`✔ Loaded environment variables from: ${loadedEnvPath}`);
+} else {
+  console.warn('❌ WARNING: No .env file found in expected paths:', envPaths);
+}
+
+console.log('Database Connection Diagnostic Config:');
+console.log('  DB_HOST:', process.env.DB_HOST || '(not set)');
+console.log('  DB_USER:', process.env.DB_USER || '(not set)');
+console.log('  DB_NAME:', process.env.DB_NAME || '(not set)');
+console.log('  DB_PORT:', process.env.DB_PORT || '(not set)');
+console.log('  NODE_ENV:', process.env.NODE_ENV || '(not set)');
 
 let isDatabaseOnline = false;
 let pool: mysql.Pool | null = null;
