@@ -127,14 +127,22 @@ export const Settlements: React.FC = () => {
       setUploadFile(null);
       fetchSettlements();
     } catch (err: any) {
-      const errorMsg = err.response?.data?.error || 'File upload failed.';
-      const errorStack = err.response?.data?.stack || err.message;
-      const errorDetails = err.response?.data?.details || '';
+      const serverErrors = err.response?.data?.errors;
+      const errorMsg = err.response?.data?.error || 'File upload failed. Columns do not match standard format.';
+      
+      let displayErrors: string[] = [];
+      if (Array.isArray(serverErrors)) {
+        displayErrors = [...serverErrors];
+      } else {
+        const errorStack = err.response?.data?.stack || err.message;
+        const errorDetails = err.response?.data?.details || '';
+        displayErrors = [errorStack, errorDetails].filter(Boolean);
+      }
 
       setUploadStatus({
         success: false,
         message: errorMsg,
-        errors: errorStack ? [errorStack, errorDetails].filter(Boolean) : undefined
+        errors: displayErrors
       });
     } finally {
       setUploading(false);
