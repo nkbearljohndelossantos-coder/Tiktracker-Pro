@@ -3,11 +3,15 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-dotenv.config();
-let isDatabaseOnline = false;
-let pool = null;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Look for .env in current folder, backend folder, and project root folder
+dotenv.config();
+dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, '../../../.env') });
+let isDatabaseOnline = false;
+let pool = null;
 // Sandbox In-Memory Data Store (Fallback if MySQL is offline)
 const memoryStore = {
     users: [
@@ -103,7 +107,8 @@ try {
         await initializeDatabaseSchema();
     })
         .catch((err) => {
-        console.warn('MySQL Offline. Starting in Sandboxed In-Memory Fallback mode.');
+        console.warn('MySQL connection failed:', err.message || err);
+        console.warn('Starting in Sandboxed In-Memory Fallback mode.');
         isDatabaseOnline = false;
     });
 }
