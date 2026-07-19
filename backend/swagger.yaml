@@ -1,0 +1,207 @@
+openapi: 3.0.3
+info:
+  title: TikTracker Pro - API Documentation
+  description: REST API for TikTok Shop Profit, Settlement, Waybill & Return Management System
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+    description: Local development server
+paths:
+  /auth/login:
+    post:
+      summary: User authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+        '401':
+          description: Invalid credentials
+
+  /auth/register:
+    post:
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - email
+                - role
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                role:
+                  type: string
+                  enum: [SUPER_ADMIN, MANAGER, STAFF, VIEWER]
+      responses:
+        '201':
+          description: User registered
+        '400':
+          description: Validation error
+
+  /dashboard/stats:
+    get:
+      summary: Get aggregated dashboard KPI metrics
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Dashboard summary and charts trends data
+
+  /products:
+    get:
+      summary: List all products
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of products with inventory & cost breakdowns
+    post:
+      summary: Create new product configuration (Admin/Manager)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sku
+                - name
+              properties:
+                sku:
+                  type: string
+                name:
+                  type: string
+                supplier:
+                  type: string
+                purchase_cost:
+                  type: number
+                packaging_cost:
+                  type: number
+      responses:
+        '201':
+          description: Product configuration saved
+
+  /orders:
+    get:
+      summary: Query orders list with search and filters
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Array of orders
+
+  /orders/{id}:
+    get:
+      summary: Fetch granular details for a single Order ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed order record with timeline, items, waybills, and profit engine values
+
+  /settlements/import:
+    post:
+      summary: Import TikTok report spreadsheet (Excel)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [ORDER, SETTLEMENT, RETURN, TRANSACTION]
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Report rows successfully loaded
+
+  /waybills/upload:
+    post:
+      summary: Bulk waybill images/PDFs upload for OCR & auto-matching
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Extraction findings
+
+  /returns/scan:
+    post:
+      summary: Scan returned parcel tracking barcodes
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                barcode:
+                  type: string
+      responses:
+        '200':
+          description: Corresponding original order info returned
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
