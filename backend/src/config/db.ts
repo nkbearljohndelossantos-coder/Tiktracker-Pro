@@ -275,6 +275,120 @@ export const query = async (sql: string, params: any[] = []): Promise<any> => {
     });
   }
 
+  // --- SANDBOX WRITE OPERATIONS MAPPINGS ---
+  if (cleanedSql.includes('insert into orders')) {
+    memoryStore.orders.push({
+      order_id: params[0],
+      tracking_number: params[1],
+      customer_name: params[2],
+      phone_number: params[3],
+      shipping_address: params[4],
+      courier: params[5],
+      order_status: params[6],
+      total_amount: params[7],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into order_items')) {
+    memoryStore.order_items.push({
+      id: memoryStore.order_items.length + 1,
+      order_id: params[0],
+      sku: params[1],
+      product_name: params[2],
+      variation: params[3],
+      quantity: params[4],
+      price: params[5]
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into settlements')) {
+    memoryStore.settlements.push({
+      id: memoryStore.settlements.length + 1,
+      settlement_id: params[0],
+      order_id: params[1],
+      statement_date: params[2] || new Date().toISOString(),
+      gross_sales: parseFloat(params[3] || 0),
+      tiktok_fees: parseFloat(params[4] || 0),
+      affiliate_commission: parseFloat(params[5] || 0),
+      shipping_fee_subsidy: parseFloat(params[6] || 0),
+      shipping_fee_actual: parseFloat(params[7] || 0),
+      platform_discount: parseFloat(params[8] || 0),
+      adjustments: parseFloat(params[9] || 0),
+      refund: parseFloat(params[10] || 0),
+      return_loss: parseFloat(params[11] || 0),
+      tax: parseFloat(params[12] || 0),
+      statement_amount: parseFloat(params[13] || 0),
+      net_profit: parseFloat(params[14] || 0),
+      raw_data_json: params[15]
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into waybills')) {
+    memoryStore.waybills.push({
+      id: memoryStore.waybills.length + 1,
+      order_id: params[0],
+      tracking_number: params[1],
+      customer_name: params[2],
+      phone_number: params[3],
+      shipping_address: params[4],
+      courier: params[5],
+      barcode_data: params[6],
+      qr_data: params[7],
+      is_matched: params[8] === true,
+      matched_method: params[9],
+      uploaded_at: new Date().toISOString()
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into returns')) {
+    memoryStore.returns.push({
+      id: memoryStore.returns.length + 1,
+      return_id: params[0],
+      order_id: params[1],
+      sku: params[2],
+      tracking_number: params[3],
+      scan_date: params[4] || new Date().toISOString(),
+      reason: params[5],
+      condition_status: params[6],
+      return_shipping_cost: params[7],
+      refunded_amount: params[8],
+      returned_to_inventory: params[9] === true
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into inventory_movements')) {
+    memoryStore.inventory_movements.push({
+      id: memoryStore.inventory_movements.length + 1,
+      sku: params[0],
+      movement_type: params[1],
+      quantity: params[2],
+      notes: params[3],
+      created_by: params[4],
+      created_at: new Date().toISOString()
+    });
+    return { affectedRows: 1 };
+  }
+
+  if (cleanedSql.includes('insert into audit_logs')) {
+    memoryStore.audit_logs.push({
+      id: memoryStore.audit_logs.length + 1,
+      user_id: params[0],
+      action: params[1],
+      module: params[2],
+      details: params[3],
+      ip_address: params[4] || '127.0.0.1',
+      created_at: new Date().toISOString()
+    });
+    return { affectedRows: 1 };
+  }
+
   // Fallback defaults for writes and updates
   if (cleanedSql.startsWith('insert into') || cleanedSql.startsWith('update') || cleanedSql.startsWith('delete')) {
     return { affectedRows: 1, insertId: Date.now() };

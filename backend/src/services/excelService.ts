@@ -40,8 +40,8 @@ export class ExcelService {
     
     for (let r = 0; r < Math.min(rawData.length, 10); r++) {
       const row = rawData[r];
-      if (row.some(cell => {
-        const str = String(cell).toLowerCase();
+      if (row && Array.isArray(row) && row.some(cell => {
+        const str = String(cell || '').toLowerCase();
         return str.includes('order id') || str.includes('order no') || str.includes('tracking') || str.includes('settlement');
       })) {
         headerRowIndex = r;
@@ -52,10 +52,11 @@ export class ExcelService {
 
     if (headers.length === 0) {
       // Fallback to row 0 if we couldn't detect a clear header row
-      headers = rawData[0].map(cell => this.normalizeHeader(String(cell || '')));
+      const firstRow = rawData[0] || [];
+      headers = firstRow.map(cell => this.normalizeHeader(String(cell || '')));
     }
 
-    const dataRows = rawData.slice(headerRowIndex + 1).filter(row => row.length > 0 && row[0] !== undefined);
+    const dataRows = rawData.slice(headerRowIndex + 1).filter(row => row && Array.isArray(row) && row.length > 0 && row[0] !== undefined);
 
     if (fileType === 'ORDER') {
       return await this.importOrders(headers, dataRows, userId);

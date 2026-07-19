@@ -22,6 +22,7 @@ export const authenticateJWT = (req: AuthenticatedRequest, res: Response, next: 
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
+        console.error('JWT Verification failed:', err.message);
         return res.status(403).json({ error: 'Token signature is invalid or expired.' });
       }
       req.user = decoded as AuthenticatedRequest['user'];

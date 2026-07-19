@@ -73,24 +73,28 @@ export const getDashboardStats = async (req: Request, res: Response) => {
       ORDER BY date_str ASC
     `) as any[];
 
+    const finance = financeStats || {};
+    const orders = orderStats || {};
+    const sales = salesPeriods || {};
+
     res.json({
       kpis: {
-        totalRevenue: parseFloat(financeStats.total_revenue || 0),
-        totalSettlement: parseFloat(financeStats.total_settlement || 0),
-        netProfit: parseFloat(financeStats.net_profit || 0),
-        grossProfit: parseFloat(financeStats.gross_profit || 0),
-        totalOrders: parseInt(orderStats.total_orders || 0),
-        returnedOrders: parseInt(orderStats.returned_refunded_orders || 0),
-        cancelledOrders: parseInt(orderStats.cancelled_orders || 0),
-        pendingOrders: parseInt(orderStats.pending_orders || 0),
-        todaySales: parseFloat(salesPeriods.today_sales || 0),
-        weeklySales: parseFloat(salesPeriods.weekly_sales || 0),
-        monthlySales: parseFloat(salesPeriods.monthly_sales || 0)
+        totalRevenue: parseFloat(finance.total_revenue || 0),
+        totalSettlement: parseFloat(finance.total_settlement || 0),
+        netProfit: parseFloat(finance.net_profit || 0),
+        grossProfit: parseFloat(finance.gross_profit || 0),
+        totalOrders: parseInt(orders.total_orders || 0),
+        returnedOrders: parseInt(orders.returned_refunded_orders || 0),
+        cancelledOrders: parseInt(orders.cancelled_orders || 0),
+        pendingOrders: parseInt(orders.pending_orders || 0),
+        todaySales: parseFloat(sales.today_sales || 0),
+        weeklySales: parseFloat(sales.weekly_sales || 0),
+        monthlySales: parseFloat(sales.monthly_sales || 0)
       },
       bestSelling,
       highestProfit,
       lowestProfit,
-      trends: trends.map((t: any) => ({
+      trends: (trends || []).map((t: any) => ({
         date: t.date_str,
         revenue: parseFloat(t.revenue || 0),
         profit: parseFloat(t.profit || 0),
