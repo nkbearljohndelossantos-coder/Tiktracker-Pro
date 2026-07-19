@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { Shield, KeyRound, User as UserIcon, AlertCircle } from 'lucide-react';
+import { KeyRound, User as UserIcon, AlertCircle } from 'lucide-react';
 
 export const Login: React.FC = () => {
   const { login } = useAuth();
@@ -46,14 +46,11 @@ export const Login: React.FC = () => {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-500/5 dark:bg-blue-500/10 blur-[120px] pointer-events-none"></div>
 
       <div className="w-full max-w-md bg-white/70 dark:bg-[#111827]/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 p-8 rounded-2xl shadow-xl dark:shadow-2xl relative z-10 animate-fade-in">
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20 mb-4">
-            <Shield className="w-8 h-8 text-white" />
+        <div className="text-center mb-6">
+          <div className="mb-4">
+            <img src="/logo.png" alt="NKB Manufacturing Corp." className="h-28 object-contain mx-auto" />
           </div>
-          <h2 className="text-2xl font-black bg-gradient-to-r from-slate-900 to-slate-700 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-            TikTracker Pro
-          </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">TikTok Shop Profit & Operations Management</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold tracking-wide">TikTok Shop Profit & Operations Management</p>
         </div>
 
         {error && (

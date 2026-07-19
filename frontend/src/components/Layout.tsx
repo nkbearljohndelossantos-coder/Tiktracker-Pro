@@ -73,18 +73,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen flex text-slate-800 bg-[#FAFBFD] dark:text-slate-100 dark:bg-[#07090E]">
       {/* --- SIDEBAR DESKTOP --- */}
       <aside className="hidden lg:flex flex-col w-64 bg-white/60 dark:bg-[#0C111C]/80 border-r border-slate-200/50 dark:border-slate-800/50 backdrop-blur-lg">
-        <div className="p-6 border-b border-slate-200/50 dark:border-slate-800/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-emerald-500/20">
-              T
-            </div>
-            <div>
-              <h1 className="font-extrabold text-lg bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-                TikTracker Pro
-              </h1>
-              <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Enterprise Hub</p>
-            </div>
-          </div>
+        <div className="p-4 border-b border-slate-200/50 dark:border-slate-800/50 text-center">
+          <img src="/logo.png" alt="NKB Logo" className="h-16 object-contain mx-auto" />
+          <p className="text-[9px] text-slate-400 dark:text-slate-550 uppercase tracking-widest font-bold mt-1">NKB Manufacturing Corp.</p>
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-1">
@@ -136,7 +127,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="fixed inset-0 z-50 flex lg:hidden bg-slate-950/40 backdrop-blur-sm">
           <div className="w-64 bg-white dark:bg-[#0C111C] p-6 flex flex-col h-full border-r border-slate-200 dark:border-slate-800 animate-slide-in">
             <div className="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-slate-800">
-              <span className="font-extrabold text-lg text-emerald-500">TikTracker Pro</span>
+              <img src="/logo.png" alt="NKB Logo" className="h-10 object-contain" />
               <button onClick={() => setMobileOpen(false)}>
                 <X className="w-6 h-6" />
               </button>
