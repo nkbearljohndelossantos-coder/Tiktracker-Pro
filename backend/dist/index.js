@@ -24,6 +24,8 @@ else if (fs.existsSync(parentPublicPath)) {
 }
 const app = express();
 const PORT = process.env.PORT || 5000;
+// Enable reverse proxy trust (needed for Hostinger/Nginx routing and express-rate-limit)
+app.set('trust proxy', 1);
 // Load Swagger document
 const swaggerDocument = YAML.load('./swagger.yaml');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
