@@ -65,14 +65,15 @@ app.use('/api', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
-// 7. Global Error Handler Middleware (Prevents crashes, standardizes responses)
+// 7. Global Error Handler Middleware (Prevents crashes, standardizes responses, stack exposed for deployment debugging)
 app.use((err, req, res, next) => {
     console.error('Unhandled Server Error:', err);
     const statusCode = err.status || err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
     res.status(statusCode).json({
         error: message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        stack: err.stack,
+        details: err.toString()
     });
 });
 // 8. Start server listening
