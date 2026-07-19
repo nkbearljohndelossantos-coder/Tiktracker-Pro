@@ -29,14 +29,14 @@ export class ExcelService {
                 return str.includes('order id') || str.includes('order no') || str.includes('tracking') || str.includes('settlement');
             })) {
                 headerRowIndex = r;
-                headers = row.map(cell => this.normalizeHeader(String(cell || '')));
+                headers = Array.from(row).map(cell => this.normalizeHeader(String(cell || '')));
                 break;
             }
         }
         if (headers.length === 0) {
             // Fallback to row 0 if we couldn't detect a clear header row
             const firstRow = rawData[0] || [];
-            headers = firstRow.map(cell => this.normalizeHeader(String(cell || '')));
+            headers = Array.from(firstRow).map(cell => this.normalizeHeader(String(cell || '')));
         }
         const dataRows = rawData.slice(headerRowIndex + 1).filter(row => row && Array.isArray(row) && row.length > 0 && row[0] !== undefined);
         if (fileType === 'ORDER') {
