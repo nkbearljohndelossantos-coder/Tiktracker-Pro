@@ -72,7 +72,7 @@ export class ExcelService {
             price: headers.findIndex(h => h.includes('price') || h.includes('itemprice') || h.includes('unitprice') || h.includes('originalprice'))
         };
         if (mapping.orderId === -1) {
-            return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Order ID column in Excel.'] };
+            return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Order ID column in Excel. Detected columns: ${headers.join(', ')}`] };
         }
         let imported = 0;
         let duplicates = 0;
@@ -158,7 +158,7 @@ export class ExcelService {
             netPayout: headers.findIndex(h => h.includes('net') || h.includes('netpayout') || h.includes('settlementamount') || h.includes('statementamount'))
         };
         if (mapping.settlementId === -1) {
-            return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Settlement/Statement ID column in Excel.'] };
+            return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Settlement/Statement ID column in Excel. Detected columns: ${headers.join(', ')}`] };
         }
         let imported = 0;
         let duplicates = 0;
@@ -286,7 +286,7 @@ export class ExcelService {
             refundAmount: headers.findIndex(h => h.includes('refund') || h.includes('refundamount') || h.includes('refundedamount'))
         };
         if (mapping.orderId === -1) {
-            return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Order ID column in Excel.'] };
+            return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Order ID column in Excel. Detected columns: ${headers.join(', ')}`] };
         }
         let imported = 0;
         let duplicates = 0;

@@ -90,7 +90,7 @@ export class ExcelService {
     };
 
     if (mapping.orderId === -1) {
-      return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Order ID column in Excel.'] };
+      return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Order ID column in Excel. Detected columns: ${headers.join(', ')}`] };
     }
 
     let imported = 0;
@@ -199,7 +199,7 @@ export class ExcelService {
     };
 
     if (mapping.settlementId === -1) {
-      return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Settlement/Statement ID column in Excel.'] };
+      return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Settlement/Statement ID column in Excel. Detected columns: ${headers.join(', ')}`] };
     }
 
     let imported = 0;
@@ -361,7 +361,7 @@ export class ExcelService {
     };
 
     if (mapping.orderId === -1) {
-      return { success: false, imported: 0, duplicates: 0, errors: ['Could not find Order ID column in Excel.'] };
+      return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Order ID column in Excel. Detected columns: ${headers.join(', ')}`] };
     }
 
     let imported = 0;
