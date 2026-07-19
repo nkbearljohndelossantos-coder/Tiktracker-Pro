@@ -1,8 +1,8 @@
 -- TikTracker Pro Database Schema
 -- Target Database: MySQL (InnoDB)
 
-CREATE DATABASE IF NOT EXISTS tiktracker_pro;
-USE tiktracker_pro;
+-- CREATE DATABASE IF NOT EXISTS tiktracker_pro;
+-- USE tiktracker_pro;
 
 -- 1. Users Table (Auth & RBAC)
 CREATE TABLE IF NOT EXISTS users (

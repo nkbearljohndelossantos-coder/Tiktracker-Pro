@@ -1,5 +1,4 @@
--- TikTracker Pro Seed Data
-USE tiktracker_pro;
+-- USE tiktracker_pro;
 
 -- 1. Insert Initial Users
 -- Password for admin accounts: 'admin123'
