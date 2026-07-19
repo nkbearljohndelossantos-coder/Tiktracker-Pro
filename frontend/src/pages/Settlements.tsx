@@ -127,9 +127,14 @@ export const Settlements: React.FC = () => {
       setUploadFile(null);
       fetchSettlements();
     } catch (err: any) {
+      const errorMsg = err.response?.data?.error || 'File upload failed.';
+      const errorStack = err.response?.data?.stack || err.message;
+      const errorDetails = err.response?.data?.details || '';
+
       setUploadStatus({
         success: false,
-        message: err.response?.data?.error || 'File upload failed. Ensure the Excel columns match standard formats.'
+        message: errorMsg,
+        errors: errorStack ? [errorStack, errorDetails].filter(Boolean) : undefined
       });
     } finally {
       setUploading(false);
