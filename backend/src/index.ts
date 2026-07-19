@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import apiRouter from './routes/api.js';
 
@@ -13,7 +14,17 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+
+// Resolve static assets path (checks local backend/public first for self-contained deploys)
+let frontendDistPath = path.join(__dirname, '../../frontend/dist');
+const localPublicPath = path.join(__dirname, './public');
+const parentPublicPath = path.join(__dirname, '../public');
+
+if (fs.existsSync(localPublicPath)) {
+  frontendDistPath = localPublicPath;
+} else if (fs.existsSync(parentPublicPath)) {
+  frontendDistPath = parentPublicPath;
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
