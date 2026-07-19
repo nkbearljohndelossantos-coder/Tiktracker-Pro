@@ -3,9 +3,9 @@ node_modules/
 .npm
 .yarn-cache
 
-# Build outputs
-backend/dist/
-frontend/dist/
+# Build outputs (tracked for Hostinger direct pull deployment)
+# backend/dist/
+# frontend/dist/
 
 # Environment files (sensitive credentials)
 .env
