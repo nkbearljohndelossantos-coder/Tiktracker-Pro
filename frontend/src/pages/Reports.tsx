@@ -31,10 +31,7 @@ export const Reports: React.FC = () => {
   });
   const [endDate, setEndDate] = useState(() => new Date().toISOString().slice(0, 10));
 
-  const fallbackReport: ReportRow[] = [
-    { period: '2026-07-16', order_count: 5, gross_sales: '1895.00', tiktok_fees: '95.00', affiliate_commission: '85.00', shipping_fee_actual: '110.00', shipping_fee_subsidy: '90.00', platform_discount: '40.00', adjustments: '0.00', refund: '299.00', return_loss: '30.00', tax: '21.00', payout: '1410.00', net_profit: '420.50' },
-    { period: '2026-07-15', order_count: 8, gross_sales: '2450.00', tiktok_fees: '122.50', affiliate_commission: '90.00', shipping_fee_actual: '160.00', shipping_fee_subsidy: '140.00', platform_discount: '60.00', adjustments: '0.00', refund: '0.00', return_loss: '0.00', tax: '27.50', payout: '2030.00', net_profit: '790.00' }
-  ];
+  const fallbackReport: ReportRow[] = [];
 
   const fetchReports = async () => {
     setLoading(true);

@@ -43,13 +43,7 @@ export const Settlements: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<any>(null);
 
-  const fallbackSettlements: Settlement[] = [
-    { id: 1, settlement_id: 'SET-2026-001', order_id: '574919559123456789', statement_date: '2026-07-12T18:00:00.000Z', gross_sales: '299.00', tiktok_fees: '15.00', affiliate_commission: '15.00', shipping_fee_subsidy: '20.00', shipping_fee_actual: '20.00', platform_discount: '10.00', adjustments: '0.00', refund: '0.00', return_loss: '0.00', tax: '3.50', statement_amount: '245.50', net_profit: '90.50', courier: 'J&T Express', order_status: 'COMPLETED', customer_name: 'Juan Dela Cruz' },
-    { id: 2, settlement_id: 'SET-2026-002', order_id: '574919559123456790', statement_date: '2026-07-13T18:00:00.000Z', gross_sales: '399.00', tiktok_fees: '20.00', affiliate_commission: '0.00', shipping_fee_subsidy: '0.00', shipping_fee_actual: '35.00', platform_discount: '15.00', adjustments: '0.00', refund: '0.00', return_loss: '0.00', tax: '4.50', statement_amount: '324.50', net_profit: '119.50', courier: 'Shopee Xpress', order_status: 'COMPLETED', customer_name: 'Maria Clara' },
-    { id: 3, settlement_id: 'SET-2026-003', order_id: '574919559123456791', statement_date: '2026-07-14T18:00:00.000Z', gross_sales: '699.00', tiktok_fees: '35.00', affiliate_commission: '35.00', shipping_fee_subsidy: '30.00', shipping_fee_actual: '40.00', platform_discount: '25.00', adjustments: '0.00', refund: '0.00', return_loss: '0.00', tax: '7.80', statement_amount: '556.20', net_profit: '141.20', courier: 'Flash Express', order_status: 'COMPLETED', customer_name: 'Jose Rizal' },
-    { id: 4, settlement_id: 'SET-2026-004', order_id: '574919559123456792', statement_date: '2026-07-15T18:00:00.000Z', gross_sales: '199.00', tiktok_fees: '10.00', affiliate_commission: '10.00', shipping_fee_subsidy: '20.00', shipping_fee_actual: '20.00', platform_discount: '5.00', adjustments: '0.00', refund: '0.00', return_loss: '0.00', tax: '2.20', statement_amount: '151.80', net_profit: '46.80', courier: 'J&T Express', order_status: 'COMPLETED', customer_name: 'Andres Bonifacio' },
-    { id: 5, settlement_id: 'SET-2026-005', order_id: '574919559123456793', statement_date: '2026-07-16T18:00:00.000Z', gross_sales: '299.00', tiktok_fees: '15.00', affiliate_commission: '0.00', shipping_fee_subsidy: '0.00', shipping_fee_actual: '0.00', platform_discount: '0.00', adjustments: '0.00', refund: '299.00', return_loss: '30.00', tax: '0.00', statement_amount: '-344.00', net_profit: '-499.00', courier: 'J&T Express', order_status: 'REFUNDED', customer_name: 'Emilio Aguinaldo' }
-  ];
+  const fallbackSettlements: Settlement[] = [];
 
   const fetchSettlements = async () => {
     setLoading(true);

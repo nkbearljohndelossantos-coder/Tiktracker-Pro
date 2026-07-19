@@ -18,9 +18,7 @@ export const AuditLogs: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  const fallbackLogs: AuditLog[] = [
-    { id: 1, username: 'admin', role: 'SUPER_ADMIN', action: 'DATABASE_SEED', module: 'SYSTEM', details: 'Successfully loaded database seed records for standard operational sandbox testing.', ip_address: '127.0.0.1', created_at: new Date().toISOString() }
-  ];
+  const fallbackLogs: AuditLog[] = [];
 
   useEffect(() => {
     const fetchLogs = async () => {

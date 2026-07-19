@@ -38,9 +38,7 @@ export const Returns: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
-  const fallbackLogs: ReturnLog[] = [
-    { id: 1, return_id: 'RET-574919559123456793-1', order_id: '574919559123456793', sku: 'SKU-MUG-001', tracking_number: 'JX123456796PH', scan_date: '2026-07-16T10:05:00.000Z', reason: 'Customer changed mind', condition_status: 'GOOD', return_shipping_cost: '30.00', refunded_amount: '299.00', returned_to_inventory: true, customer_name: 'Emilio Aguinaldo', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black' }
-  ];
+  const fallbackLogs: ReturnLog[] = [];
 
   const fetchLogs = async () => {
     try {

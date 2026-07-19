@@ -33,13 +33,7 @@ export const Products: React.FC = () => {
     other_expenses: 0, inventory_qty: 0
   });
 
-  const fallbackProducts: Product[] = [
-    { sku: 'SKU-MUG-001', name: 'TikTracker Dynamic Ceramic Mug - Matte Black', supplier: 'Apex Supplier Ltd.', purchase_cost: 120.00, packaging_cost: 15.00, bubble_wrap_cost: 5.00, tape_cost: 2.00, sticker_cost: 1.50, labor_cost: 10.00, other_expenses: 1.50, inventory_qty: 150 },
-    { sku: 'SKU-SHIRT-002', name: 'TikTracker Tech Premium Cotton Shirt - Navy Blue', supplier: 'Vibrant Loom Co.', purchase_cost: 180.00, packaging_cost: 10.00, bubble_wrap_cost: 2.00, tape_cost: 1.00, sticker_cost: 1.50, labor_cost: 10.00, other_expenses: 0.50, inventory_qty: 240 },
-    { sku: 'SKU-HOODIE-003', name: 'TikTracker Oversized Fleece Hoodie - Sand', supplier: 'Vibrant Loom Co.', purchase_cost: 350.00, packaging_cost: 20.00, bubble_wrap_cost: 4.00, tape_cost: 2.00, sticker_cost: 1.50, labor_cost: 15.00, other_expenses: 2.50, inventory_qty: 95 },
-    { sku: 'SKU-CAP-004', name: 'TikTracker Pro Retro Dad Cap - Pitch Black', supplier: 'TopCap Manufacturer', purchase_cost: 85.00, packaging_cost: 8.00, bubble_wrap_cost: 1.50, tape_cost: 1.00, sticker_cost: 1.50, labor_cost: 8.00, other_expenses: 0.00, inventory_qty: 45 },
-    { sku: 'SKU-BOTTLE-005', name: 'TikTracker Insulated Steel Flask - 750ml Forest Green', supplier: 'HydroMakers Co.', purchase_cost: 280.00, packaging_cost: 25.00, bubble_wrap_cost: 8.00, tape_cost: 2.50, sticker_cost: 1.50, labor_cost: 12.00, other_expenses: 3.00, inventory_qty: 18 }
-  ];
+  const fallbackProducts: Product[] = [];
 
   const fetchProducts = async () => {
     try {

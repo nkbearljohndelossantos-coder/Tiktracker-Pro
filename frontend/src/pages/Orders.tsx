@@ -46,13 +46,7 @@ export const Orders: React.FC = () => {
   const [details, setDetails] = useState<any>(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
 
-  const fallbackOrders: Order[] = [
-    { order_id: '574919559123456789', tracking_number: 'JX123456789PH', customer_name: 'Juan Dela Cruz', phone_number: '+63 917 123 4567', shipping_address: 'Paranaque City, Metro Manila', courier: 'J&T Express', order_status: 'COMPLETED', total_amount: '299.00', created_at: '2026-07-10T10:15:00.000Z', settlement_id: 'SET-2026-001', net_profit: '90.50', statement_amount: '245.50' },
-    { order_id: '574919559123456790', tracking_number: 'SPX987654321', customer_name: 'Maria Clara', phone_number: '+63 918 765 4321', shipping_address: 'Angeles City, Pampanga', courier: 'Shopee Xpress', order_status: 'COMPLETED', total_amount: '399.00', created_at: '2026-07-11T11:20:00.000Z', settlement_id: 'SET-2026-002', net_profit: '119.50', statement_amount: '324.50' },
-    { order_id: '574919559123456791', tracking_number: 'FLA555666777', customer_name: 'Jose Rizal', phone_number: '+63 919 999 8888', shipping_address: 'Calamba City, Laguna', courier: 'Flash Express', order_status: 'COMPLETED', total_amount: '699.00', created_at: '2026-07-12T09:05:00.000Z', settlement_id: 'SET-2026-003', net_profit: '141.20', statement_amount: '556.20' },
-    { order_id: '574919559123456792', tracking_number: 'JX123456795PH', customer_name: 'Andres Bonifacio', phone_number: '+63 920 111 2222', shipping_address: 'Caloocan City, Metro Manila', courier: 'J&T Express', order_status: 'COMPLETED', total_amount: '199.00', created_at: '2026-07-13T13:40:00.000Z', settlement_id: 'SET-2026-004', net_profit: '46.80', statement_amount: '151.80' },
-    { order_id: '574919559123456793', tracking_number: 'JX123456796PH', customer_name: 'Emilio Aguinaldo', phone_number: '+63 921 333 4444', shipping_address: 'Kawit, Cavite', courier: 'J&T Express', order_status: 'REFUNDED', total_amount: '299.00', created_at: '2026-07-14T15:50:00.000Z', settlement_id: 'SET-2026-005', net_profit: '-499.00', statement_amount: '-344.00' }
-  ];
+  const fallbackOrders: Order[] = [];
 
   const fetchOrders = async () => {
     setLoading(true);

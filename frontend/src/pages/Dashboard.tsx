@@ -45,44 +45,22 @@ export const Dashboard: React.FC = () => {
   // Fallback realistic sandbox metrics
   const fallbackStats = {
     kpis: {
-      totalRevenue: 249850.00,
-      totalSettlement: 184560.50,
-      netProfit: 62450.25,
-      grossProfit: 122450.25,
-      totalOrders: 1245,
-      returnedOrders: 28,
-      cancelledOrders: 15,
-      pendingOrders: 32,
-      todaySales: 12450.00,
-      weeklySales: 89450.00,
-      monthlySales: 249850.00
+      totalRevenue: 0.00,
+      totalSettlement: 0.00,
+      netProfit: 0.00,
+      grossProfit: 0.00,
+      totalOrders: 0,
+      returnedOrders: 0,
+      cancelledOrders: 0,
+      pendingOrders: 0,
+      todaySales: 0.00,
+      weeklySales: 0.00,
+      monthlySales: 0.00
     },
-    bestSelling: [
-      { sku: 'SKU-MUG-001', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black', quantity_sold: 450, total_sales: 134550.00 },
-      { sku: 'SKU-SHIRT-002', product_name: 'TikTracker Tech Premium Cotton Shirt - Navy Blue', quantity_sold: 380, total_sales: 151620.00 },
-      { sku: 'SKU-HOODIE-003', product_name: 'TikTracker Oversized Fleece Hoodie - Sand', quantity_sold: 190, total_sales: 132810.00 },
-      { sku: 'SKU-CAP-004', product_name: 'TikTracker Pro Retro Dad Cap - Pitch Black', quantity_sold: 125, total_sales: 24875.00 },
-      { sku: 'SKU-BOTTLE-005', product_name: 'TikTracker Insulated Steel Flask - 750ml Forest Green', quantity_sold: 100, total_sales: 28000.00 }
-    ],
-    highestProfit: [
-      { sku: 'SKU-HOODIE-003', product_name: 'TikTracker Oversized Fleece Hoodie - Sand', product_net_profit: 32450.00, quantity_sold: 190 },
-      { sku: 'SKU-SHIRT-002', product_name: 'TikTracker Tech Premium Cotton Shirt - Navy Blue', product_net_profit: 21620.00, quantity_sold: 380 },
-      { sku: 'SKU-MUG-001', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black', product_net_profit: 18450.00, quantity_sold: 450 }
-    ],
-    lowestProfit: [
-      { sku: 'SKU-CAP-004', product_name: 'TikTracker Pro Retro Dad Cap - Pitch Black', product_net_profit: -1240.00, quantity_sold: 125 },
-      { sku: 'SKU-BOTTLE-005', product_name: 'TikTracker Insulated Steel Flask - 750ml Forest Green', product_net_profit: 890.00, quantity_sold: 100 }
-    ],
-    trends: [
-      { date: '07-10', revenue: 8500, profit: 2100, expenses: 6400 },
-      { date: '07-11', revenue: 9200, profit: 2400, expenses: 6800 },
-      { date: '07-12', revenue: 10500, profit: 2800, expenses: 7700 },
-      { date: '07-13', revenue: 12400, profit: 3200, expenses: 9200 },
-      { date: '07-14', revenue: 11800, profit: 2900, expenses: 8900 },
-      { date: '07-15', revenue: 13500, profit: 3700, expenses: 9800 },
-      { date: '07-16', revenue: 14200, profit: 4100, expenses: 10100 },
-      { date: '07-17', revenue: 12450, profit: 3450, expenses: 9000 }
-    ]
+    bestSelling: [] as any[],
+    highestProfit: [] as any[],
+    lowestProfit: [] as any[],
+    trends: [] as any[]
   };
 
   useEffect(() => {

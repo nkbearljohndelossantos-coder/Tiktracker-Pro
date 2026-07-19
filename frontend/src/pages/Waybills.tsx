@@ -46,13 +46,8 @@ export const Waybills: React.FC = () => {
   const [resolveErr, setResolveErr] = useState<string | null>(null);
   const [activeOcrText, setActiveOcrText] = useState<string | null>(null);
 
-  const fallbackWaybills: Waybill[] = [
-    { id: 1, order_id: '574919559123456789', tracking_number: 'JX123456789PH', customer_name: 'Juan Dela Cruz', courier: 'J&T Express', file_path: '', is_matched: true, matched_method: 'ORDER_ID', uploaded_at: '2026-07-15T08:30:00.000Z' }
-  ];
-
-  const fallbackQueue: ReviewQueueItem[] = [
-    { id: 1, waybill_id: 10, tracking_number: 'UNRESOLVED-789PH', ocr_text: 'RECIPIENT: Juan Luna\nTEL: 0917-888-8888\nADD: Manila Town Plaza\nSHIP: J&T Express\nTRACKING: JX888777999PH\nPRICE: COD 450.00', reason: 'Order ID or Tracking number could not be found in orders database.', file_path: '', courier: 'J&T Express', customer_name: 'Juan Luna', phone_number: '0917-888-8888' }
-  ];
+  const fallbackWaybills: Waybill[] = [];
+  const fallbackQueue: ReviewQueueItem[] = [];
 
   const fetchWaybills = async () => {
     try {
