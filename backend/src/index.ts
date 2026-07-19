@@ -5,9 +5,15 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import apiRouter from './routes/api.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +35,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Serve frontend static assets
+app.use(express.static(frontendDistPath));
+
 // 3. Global API Rate Limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -49,9 +58,14 @@ app.use('/api', apiRouter);
 // Serve uploads folder (for waybill image review if hosted locally)
 app.use('/uploads', express.static('uploads'));
 
-// 6. 404 Route handler
-app.use((req: Request, res: Response) => {
-  res.status(404).json({ error: 'Endpoint not found.' });
+// 6. API 404 Route handler
+app.use('/api', (req: Request, res: Response) => {
+  res.status(404).json({ error: 'API endpoint not found.' });
+});
+
+// Wildcard fallback to serve React's index.html for client-side routing
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
 // 7. Global Error Handler Middleware (Prevents crashes, standardizes responses)
