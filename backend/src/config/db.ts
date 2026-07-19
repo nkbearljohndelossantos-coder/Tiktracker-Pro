@@ -15,45 +15,13 @@ const memoryStore = {
     { id: 4, username: 'viewer', password_hash: '$2a$10$5faUN3XJsnypHt09WXENBuomI7.oYi0fBMh6GW2A39fzeVkQ7sXbe', email: 'viewer@tiktrackerpro.com', role: 'VIEWER' }
   ] as any[],
   refresh_tokens: [] as any[],
-  products: [
-    { sku: 'SKU-MUG-001', name: 'TikTracker Dynamic Ceramic Mug - Matte Black', supplier: 'Apex Supplier Ltd.', purchase_cost: 120.00, packaging_cost: 15.00, bubble_wrap_cost: 5.00, tape_cost: 2.00, sticker_cost: 1.50, labor_cost: 10.00, other_expenses: 1.50, inventory_qty: 150 },
-    { sku: 'SKU-SHIRT-002', name: 'TikTracker Tech Premium Cotton Shirt - Navy Blue', supplier: 'Vibrant Loom Co.', purchase_cost: 180.00, packaging_cost: 10.00, bubble_wrap_cost: 2.00, tape_cost: 1.00, sticker_cost: 1.50, labor_cost: 10.00, other_expenses: 0.50, inventory_qty: 240 },
-    { sku: 'SKU-HOODIE-003', name: 'TikTracker Oversized Fleece Hoodie - Sand', supplier: 'Vibrant Loom Co.', purchase_cost: 350.00, packaging_cost: 20.00, bubble_wrap_cost: 4.00, tape_cost: 2.00, sticker_cost: 1.50, labor_cost: 15.00, other_expenses: 2.50, inventory_qty: 95 },
-    { sku: 'SKU-CAP-004', name: 'TikTracker Pro Retro Dad Cap - Pitch Black', supplier: 'TopCap Manufacturer', purchase_cost: 85.00, packaging_cost: 8.00, bubble_wrap_cost: 1.50, tape_cost: 1.00, sticker_cost: 1.50, labor_cost: 8.00, other_expenses: 0.00, inventory_qty: 45 },
-    { sku: 'SKU-BOTTLE-005', name: 'TikTracker Insulated Steel Flask - 750ml Forest Green', supplier: 'HydroMakers Co.', purchase_cost: 280.00, packaging_cost: 25.00, bubble_wrap_cost: 8.00, tape_cost: 2.50, sticker_cost: 1.50, labor_cost: 12.00, other_expenses: 3.00, inventory_qty: 18 }
-  ] as any[],
+  products: [] as any[],
   product_cost_history: [] as any[],
-  orders: [
-    { order_id: '574919559123456789', tracking_number: 'JX123456789PH', customer_name: 'Juan Dela Cruz', phone_number: '+63 917 123 4567', shipping_address: 'Block 5 Lot 12, Moonwalk Phase 2, Paranaque City, Metro Manila', courier: 'J&T Express', order_status: 'COMPLETED', total_amount: 299.00, created_at: new Date('2026-07-10 10:15:00').toISOString(), updated_at: new Date('2026-07-12 14:30:00').toISOString(), imported_at: new Date().toISOString() },
-    { order_id: '574919559123456790', tracking_number: 'SPX987654321', customer_name: 'Maria Clara', phone_number: '+63 918 765 4321', shipping_address: '142 Rizal Street, Angeles City, Pampanga', courier: 'Shopee Xpress', order_status: 'COMPLETED', total_amount: 399.00, created_at: new Date('2026-07-11 11:20:00').toISOString(), updated_at: new Date('2026-07-13 16:10:00').toISOString(), imported_at: new Date().toISOString() },
-    { order_id: '574919559123456791', tracking_number: 'FLA555666777', customer_name: 'Jose Rizal', phone_number: '+63 919 999 8888', shipping_address: 'Calamba Plaza, Calamba City, Laguna', courier: 'Flash Express', order_status: 'COMPLETED', total_amount: 699.00, created_at: new Date('2026-07-12 09:05:00').toISOString(), updated_at: new Date('2026-07-14 11:45:00').toISOString(), imported_at: new Date().toISOString() },
-    { order_id: '574919559123456792', tracking_number: 'JX123456795PH', customer_name: 'Andres Bonifacio', phone_number: '+63 920 111 2222', shipping_address: 'Monumento Circle, Caloocan City, Metro Manila', courier: 'J&T Express', order_status: 'COMPLETED', total_amount: 199.00, created_at: new Date('2026-07-13 13:40:00').toISOString(), updated_at: new Date('2026-07-15 15:20:00').toISOString(), imported_at: new Date().toISOString() },
-    { order_id: '574919559123456793', tracking_number: 'JX123456796PH', customer_name: 'Emilio Aguinaldo', phone_number: '+63 921 333 4444', shipping_address: 'Aguinaldo Shrine, Kawit, Cavite', courier: 'J&T Express', order_status: 'REFUNDED', total_amount: 299.00, created_at: new Date('2026-07-14 15:50:00').toISOString(), updated_at: new Date('2026-07-16 10:05:00').toISOString(), imported_at: new Date().toISOString() },
-    { order_id: '574919559123456794', tracking_number: 'JX123456797PH', customer_name: 'Gabriela Silang', phone_number: '+63 922 555 6666', shipping_address: 'Vigan Plaza, Vigan City, Ilocos Sur', courier: 'J&T Express', order_status: 'COMPLETED', total_amount: 580.00, created_at: new Date('2026-07-15 08:30:00').toISOString(), updated_at: new Date('2026-07-17 12:30:00').toISOString(), imported_at: new Date().toISOString() }
-  ] as any[],
-  order_items: [
-    { id: 1, order_id: '574919559123456789', sku: 'SKU-MUG-001', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black', variation: 'Matte Black', quantity: 1, price: 299.00 },
-    { id: 2, order_id: '574919559123456790', sku: 'SKU-SHIRT-002', product_name: 'TikTracker Tech Premium Cotton Shirt - Navy Blue', variation: 'Navy Blue - M', quantity: 1, price: 399.00 },
-    { id: 3, order_id: '574919559123456791', sku: 'SKU-HOODIE-003', product_name: 'TikTracker Oversized Fleece Hoodie - Sand', variation: 'Sand - L', quantity: 1, price: 699.00 },
-    { id: 4, order_id: '574919559123456792', sku: 'SKU-CAP-004', product_name: 'TikTracker Pro Retro Dad Cap - Pitch Black', variation: 'Default', quantity: 1, price: 199.00 },
-    { id: 5, order_id: '574919559123456793', sku: 'SKU-MUG-001', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black', variation: 'Matte Black', quantity: 1, price: 299.00 },
-    { id: 6, order_id: '574919559123456794', sku: 'SKU-MUG-001', product_name: 'TikTracker Dynamic Ceramic Mug - Matte Black', variation: 'Matte Black', quantity: 1, price: 299.00 },
-    { id: 7, order_id: '574919559123456794', sku: 'SKU-CAP-004', product_name: 'TikTracker Pro Retro Dad Cap - Pitch Black', variation: 'Default', quantity: 1, price: 199.00 }
-  ] as any[],
-  settlements: [
-    { id: 1, settlement_id: 'SET-2026-001', order_id: '574919559123456789', statement_date: new Date('2026-07-12 18:00:00').toISOString(), gross_sales: 299.00, tiktok_fees: 15.00, affiliate_commission: 15.00, shipping_fee_subsidy: 20.00, shipping_fee_actual: 20.00, platform_discount: 10.00, adjustments: 0.00, refund: 0.00, return_loss: 0.00, tax: 3.50, statement_amount: 245.50, net_profit: 90.50, imported_at: new Date().toISOString() },
-    { id: 2, settlement_id: 'SET-2026-002', order_id: '574919559123456790', statement_date: new Date('2026-07-13 18:00:00').toISOString(), gross_sales: 399.00, tiktok_fees: 20.00, affiliate_commission: 0.00, shipping_fee_subsidy: 0.00, shipping_fee_actual: 35.00, platform_discount: 15.00, adjustments: 0.00, refund: 0.00, return_loss: 0.00, tax: 4.50, statement_amount: 324.50, net_profit: 119.50, imported_at: new Date().toISOString() },
-    { id: 3, settlement_id: 'SET-2026-003', order_id: '574919559123456791', statement_date: new Date('2026-07-14 18:00:00').toISOString(), gross_sales: 699.00, tiktok_fees: 35.00, affiliate_commission: 35.00, shipping_fee_subsidy: 30.00, shipping_fee_actual: 40.00, platform_discount: 25.00, adjustments: 0.00, refund: 0.00, return_loss: 0.00, tax: 7.80, statement_amount: 556.20, net_profit: 141.20, imported_at: new Date().toISOString() },
-    { id: 4, settlement_id: 'SET-2026-004', order_id: '574919559123456792', statement_date: new Date('2026-07-15 18:00:00').toISOString(), gross_sales: 199.00, tiktok_fees: 10.00, affiliate_commission: 10.00, shipping_fee_subsidy: 20.00, shipping_fee_actual: 20.00, platform_discount: 5.00, adjustments: 0.00, refund: 0.00, return_loss: 0.00, tax: 2.20, statement_amount: 151.80, net_profit: 46.80, imported_at: new Date().toISOString() },
-    { id: 5, settlement_id: 'SET-2026-005', order_id: '574919559123456793', statement_date: new Date('2026-07-16 18:00:00').toISOString(), gross_sales: 299.00, tiktok_fees: 15.00, affiliate_commission: 0.00, shipping_fee_subsidy: 0.00, shipping_fee_actual: 0.00, platform_discount: 0.00, adjustments: 0.00, refund: 299.00, return_loss: 30.00, tax: 0.00, statement_amount: -344.00, net_profit: -499.00, imported_at: new Date().toISOString() },
-    { id: 6, settlement_id: 'SET-2026-006', order_id: '574919559123456794', statement_date: new Date('2026-07-17 18:00:00').toISOString(), gross_sales: 498.00, tiktok_fees: 25.00, affiliate_commission: 25.00, shipping_fee_subsidy: 20.00, shipping_fee_actual: 30.00, platform_discount: 15.00, adjustments: 0.00, refund: 0.00, return_loss: 0.00, tax: 5.50, statement_amount: 397.50, net_profit: 137.50, imported_at: new Date().toISOString() }
-  ] as any[],
-  waybills: [
-    { id: 1, order_id: '574919559123456789', tracking_number: 'JX123456789PH', customer_name: 'Juan Dela Cruz', phone_number: '+63 917 123 4567', shipping_address: 'Block 5 Lot 12, Moonwalk Phase 2, Paranaque City, Metro Manila', courier: 'J&T Express', barcode_data: '574919559123456789', qr_data: 'JX123456789PH', file_path: '', ocr_text: 'RECIPIENT: Juan Dela Cruz...', is_matched: true, matched_method: 'ORDER_ID', uploaded_at: new Date().toISOString() }
-  ] as any[],
-  waybill_review_queue: [
-    { id: 1, waybill_id: 10, tracking_number: 'UNRESOLVED-789PH', ocr_text: 'RECIPIENT: Juan Luna\nTEL: 0917-888-8888\nADD: Manila Town Plaza\nSHIP: J&T Express\nTRACKING: JX888777999PH\nPRICE: COD 450.00', reason: 'Order ID or Tracking number could not be found in orders database.', is_resolved: false, resolved_by: null, resolved_at: null, file_path: '', courier: 'J&T Express', customer_name: 'Juan Luna', phone_number: '0917-888-8888' }
-  ] as any[],
+  orders: [] as any[],
+  order_items: [] as any[],
+  settlements: [] as any[],
+  waybills: [] as any[],
+  waybill_review_queue: [] as any[],
   returns: [] as any[],
   inventory_movements: [] as any[],
   system_settings: [
