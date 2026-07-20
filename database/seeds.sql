@@ -13,6 +13,7 @@ INSERT INTO users (id, username, password_hash, email, role) VALUES
 ON DUPLICATE KEY UPDATE id=id;
 
 -- 2. Insert System Settings
+INSERT INTO system_settings (setting_key, setting_value) VALUES
 ('company_name', 'NKB Manufacturing Corp.'),
 ('currency', 'PHP'),
 ('low_stock_threshold', '20'),
