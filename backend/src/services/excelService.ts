@@ -1,12 +1,14 @@
 import xlsx from 'xlsx';
 import { executeTransaction, query } from '../config/db.js';
 import ProfitEngine, { SettlementFinancials } from './profitEngine.js';
+import { SettlementParser } from './importer/settlementParser.js';
 
 export interface ParseResult {
   success: boolean;
   imported: number;
   duplicates: number;
   errors: string[];
+  log?: any; // Detailed import log
 }
 
 export class ExcelService {
@@ -25,6 +27,19 @@ export class ExcelService {
     fileType: 'ORDER' | 'SETTLEMENT' | 'TRANSACTION' | 'RETURN' | 'ADJUSTMENT' | 'INCOME',
     userId: number
   ): Promise<ParseResult> {
+    
+    // Delegate to the new modular parser for settlements
+    if (fileType === 'SETTLEMENT' || fileType === 'TRANSACTION') {
+      const result = await SettlementParser.parseAndImport(fileBuffer, userId);
+      return {
+         success: result.success,
+         imported: result.log ? result.log.importedRows : 0,
+         duplicates: result.log ? result.log.skippedRows : 0, // Skipped rows includes duplicates and errors
+         errors: result.log ? result.log.errors.map(e => `Row ${e.rowNumber}: ${e.reason}`) : [],
+         log: result.log
+      };
+    }
+
     const workbook = xlsx.read(fileBuffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
@@ -60,8 +75,6 @@ export class ExcelService {
 
     if (fileType === 'ORDER') {
       return await this.importOrders(headers, dataRows, userId);
-    } else if (fileType === 'SETTLEMENT' || fileType === 'TRANSACTION') {
-      return await this.importSettlements(headers, dataRows, userId);
     } else if (fileType === 'RETURN') {
       return await this.importReturns(headers, dataRows, userId);
     } else {
@@ -177,174 +190,6 @@ export class ExcelService {
     return { success: true, imported, duplicates, errors };
   }
 
-  /**
-   * Import TikTok Settlements report
-   */
-  private static async importSettlements(headers: string[], rows: any[][], userId: number): Promise<ParseResult> {
-    const mapping = {
-      settlementId: headers.findIndex(h => h.includes('settlementid') || h.includes('statementid') || h.includes('payoutid') || h.includes('paymentid')),
-      orderId: headers.findIndex(h => h.includes('orderid') || h.includes('orderno') || h.includes('orderid')),
-      statementDate: headers.findIndex(h => h.includes('date') || h.includes('settlementtime') || h.includes('releasedate') || h.includes('statementdate')),
-      grossSales: headers.findIndex(h => h.includes('grosssales') || h.includes('revenue') || h.includes('amount') || h.includes('orderamount')),
-      tiktokFees: headers.findIndex(h => h.includes('fee') || h.includes('tiktokfee') || h.includes('commission') || h.includes('transactionfee') || h.includes('platformfee')),
-      affiliateCommission: headers.findIndex(h => h.includes('affiliate') || h.includes('affiliatecommission') || h.includes('creatorcommission')),
-      shippingSubsidy: headers.findIndex(h => h.includes('shippingsubsidy') || h.includes('shippingfeesubsidy') || h.includes('platformshipping')),
-      shippingActual: headers.findIndex(h => h.includes('shippingactual') || h.includes('actualshipping') || h.includes('shippingfee')),
-      discount: headers.findIndex(h => h.includes('discount') || h.includes('platformvoucher') || h.includes('voucher')),
-      adjustments: headers.findIndex(h => h.includes('adjustment') || h.includes('otheradjustment')),
-      refund: headers.findIndex(h => h.includes('refund') || h.includes('refundamount')),
-      returnLoss: headers.findIndex(h => h.includes('returnloss') || h.includes('returnshippingcost')),
-      tax: headers.findIndex(h => h.includes('tax') || h.includes('vat') || h.includes('withholdingtax')),
-      netPayout: headers.findIndex(h => h.includes('net') || h.includes('netpayout') || h.includes('settlementamount') || h.includes('statementamount'))
-    };
-
-    if (mapping.settlementId === -1) {
-      return { success: false, imported: 0, duplicates: 0, errors: [`Could not find Settlement/Statement ID column in Excel. Detected columns: ${headers.join(', ')}`] };
-    }
-
-    let imported = 0;
-    let duplicates = 0;
-    const errors: string[] = [];
-
-    await executeTransaction(async (conn) => {
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        try {
-          const settlementId = String(row[mapping.settlementId] || '').trim();
-          const orderId = mapping.orderId !== -1 ? String(row[mapping.orderId] || '').trim() : '';
-
-          if (!settlementId || !orderId) continue;
-
-          // Check duplicate settlement-order pair
-          const [existing] = await conn.execute(
-            'SELECT id FROM settlements WHERE settlement_id = ? AND order_id = ?',
-            [settlementId, orderId]
-          );
-          if ((existing as any[]).length > 0) {
-            duplicates++;
-            continue;
-          }
-
-          // Parse financials
-          const grossSales = mapping.grossSales !== -1 ? Math.abs(parseFloat(row[mapping.grossSales])) || 0.0 : 0.0;
-          
-          // Combine fee columns if multiple matches. For simplicity, parse fields, treat negative/positive correctly
-          let fees = 0;
-          if (mapping.tiktokFees !== -1) {
-            fees = Math.abs(parseFloat(row[mapping.tiktokFees])) || 0.0;
-          }
-          
-          const affiliateCommission = mapping.affiliateCommission !== -1 ? Math.abs(parseFloat(row[mapping.affiliateCommission])) || 0.0 : 0.0;
-          const shippingSubsidy = mapping.shippingSubsidy !== -1 ? parseFloat(row[mapping.shippingSubsidy]) || 0.0 : 0.0;
-          const shippingActual = mapping.shippingActual !== -1 ? Math.abs(parseFloat(row[mapping.shippingActual])) || 0.0 : 0.0;
-          const discount = mapping.discount !== -1 ? Math.abs(parseFloat(row[mapping.discount])) || 0.0 : 0.0;
-          const adjustments = mapping.adjustments !== -1 ? parseFloat(row[mapping.adjustments]) || 0.0 : 0.0;
-          const refund = mapping.refund !== -1 ? Math.abs(parseFloat(row[mapping.refund])) || 0.0 : 0.0;
-          const returnLoss = mapping.returnLoss !== -1 ? Math.abs(parseFloat(row[mapping.returnLoss])) || 0.0 : 0.0;
-          const tax = mapping.tax !== -1 ? Math.abs(parseFloat(row[mapping.tax])) || 0.0 : 0.0;
-          const rawPayout = mapping.netPayout !== -1 ? parseFloat(row[mapping.netPayout]) || 0.0 : 0.0;
-          
-          const statementDateRaw = mapping.statementDate !== -1 ? row[mapping.statementDate] : null;
-          let statementDate: string | null = null;
-          if (statementDateRaw) {
-            // Excel dates can be numbers or strings
-            if (typeof statementDateRaw === 'number') {
-              const dateObj = new Date((statementDateRaw - 25569) * 86400 * 1000);
-              statementDate = dateObj.toISOString().slice(0, 19).replace('T', ' ');
-            } else {
-              statementDate = new Date(statementDateRaw).toISOString().slice(0, 19).replace('T', ' ');
-            }
-          }
-
-          // Calculate COGS
-          // Get order items from database
-          const [orderItems] = await conn.execute(
-            'SELECT sku, quantity FROM order_items WHERE order_id = ?',
-            [orderId]
-          );
-
-          const itemsList = (orderItems as any[]).map(item => ({
-            sku: item.sku || '',
-            quantity: item.quantity
-          }));
-
-          const skus = itemsList.map(item => item.sku).filter(sku => sku !== '');
-          
-          let totalCogs = 0;
-          if (skus.length > 0) {
-            // Get costs
-            const costMap = new Map<string, any>();
-            const placeholders = skus.map(() => '?').join(',');
-            const [products] = await conn.execute(
-              `SELECT sku, purchase_cost, packaging_cost, bubble_wrap_cost, tape_cost, sticker_cost, labor_cost, other_expenses
-               FROM products WHERE sku IN (${placeholders})`,
-              skus
-            );
-            
-            (products as any[]).forEach(p => {
-              costMap.set(p.sku, {
-                sku: p.sku,
-                purchase_cost: parseFloat(p.purchase_cost),
-                packaging_cost: parseFloat(p.packaging_cost),
-                bubble_wrap_cost: parseFloat(p.bubble_wrap_cost),
-                tape_cost: parseFloat(p.tape_cost),
-                sticker_cost: parseFloat(p.sticker_cost),
-                labor_cost: parseFloat(p.labor_cost),
-                other_expenses: parseFloat(p.other_expenses)
-              });
-            });
-
-            const cogsDetails = ProfitEngine.calculateCOGS(itemsList, costMap);
-            totalCogs = cogsDetails.total;
-          }
-
-          // Compute Profit
-          const financials: SettlementFinancials = {
-            gross_sales: grossSales,
-            tiktok_fees: fees,
-            affiliate_commission: affiliateCommission,
-            shipping_fee_subsidy: shippingSubsidy,
-            shipping_fee_actual: shippingActual,
-            platform_discount: discount,
-            adjustments,
-            refund,
-            return_loss: returnLoss,
-            tax
-          };
-
-          const calculated = ProfitEngine.calculateProfit(financials, totalCogs);
-
-          // Save Settlement
-          await conn.execute(
-            `INSERT INTO settlements (
-              settlement_id, order_id, statement_date, gross_sales, tiktok_fees,
-              affiliate_commission, shipping_fee_subsidy, shipping_fee_actual,
-              platform_discount, adjustments, refund, return_loss, tax,
-              statement_amount, net_profit, raw_data_json
-             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-              settlementId, orderId, statementDate, grossSales, fees,
-              affiliateCommission, shippingSubsidy, shippingActual,
-              discount, adjustments, refund, returnLoss, tax,
-              rawPayout !== 0.0 ? rawPayout : calculated.statement_amount,
-              calculated.net_profit, JSON.stringify(row)
-            ]
-          );
-
-          imported++;
-        } catch (err: any) {
-          errors.push(`Row ${i + 2}: ${err.message}`);
-        }
-      }
-    });
-
-    await query(
-      "INSERT INTO audit_logs (user_id, action, module, details) VALUES (?, 'SETTLEMENT_IMPORT', 'FINANCE', ?)",
-      [userId, `Imported ${imported} settlements. Duplicates: ${duplicates}. Errors: ${errors.length}`]
-    );
-
-    return { success: true, imported, duplicates, errors };
-  }
 
   /**
    * Import TikTok Return reports
