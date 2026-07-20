@@ -56,8 +56,8 @@ export class ExcelService {
     for (let r = 0; r < Math.min(rawData.length, 10); r++) {
       const row = rawData[r];
       if (row && Array.isArray(row) && row.some(cell => {
-        const str = String(cell || '').toLowerCase();
-        return str.includes('order id') || str.includes('order no') || str.includes('tracking') || str.includes('settlement');
+        const str = String(cell || '').toLowerCase().replace(/[\s\-_()]/g, '');
+        return str.includes('orderid') || str.includes('orderno') || str.includes('tracking') || str.includes('settlement') || str.includes('orderadjustmentid');
       })) {
         headerRowIndex = r;
         headers = Array.from(row).map(cell => this.normalizeHeader(String(cell || '')));
@@ -88,7 +88,7 @@ export class ExcelService {
   private static async importOrders(headers: string[], rows: any[][], userId: number): Promise<ParseResult> {
     // Map of logical columns to standard header names (variations)
     const mapping = {
-      orderId: headers.findIndex(h => h.includes('orderid') || h.includes('orderno') || h.includes('ordernumber')),
+      orderId: headers.findIndex(h => h.includes('orderid') || h.includes('orderno') || h.includes('ordernumber') || h.includes('orderadjustmentid') || h.includes('relatedorderid')),
       tracking: headers.findIndex(h => h.includes('tracking') || h.includes('waybill') || h.includes('trackingnumber')),
       customer: headers.findIndex(h => h.includes('customer') || h.includes('recipient') || h.includes('buyername') || h.includes('receivername')),
       phone: headers.findIndex(h => h.includes('phone') || h.includes('contact') || h.includes('tel')),
